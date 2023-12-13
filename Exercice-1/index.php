@@ -93,15 +93,31 @@ foreach ($shows as $show) {
 require_once('connextion.php');
 
 // demande a ma base de donner de faire une requet  pour selection tous les user
-$request = $db->query('SELECT * FROM clients WHERE cardNumber');
+$request = $db->query('SELECT * FROM clients LEFT JOIN cards ON cards.cardNumber = clients.cardNumber');
 // on recupere la demande d'aller chercher 
 $clients = $request->fetchAll();
 
 foreach ($clients as $client) {
 
-    echo ('le Nom  : ' . $client['lastName'] . '<br>' . 'le prenom  : '
-        . $client['firstName'] . '<br>' . 'date de naissance  :' . $client['birthDate'] . '<br>' . 'carte  :' . $client['cardNumber'] . '<br>');
+    if ($client['cardTypesId']===1) {
+        echo ('le Nom  : ' . $client['lastName'] .'<br>'.'le Prenom  : '. $client['firstName'] .'<br>');
+        echo ('date de naissance  : ' .$client['birthDate'].'<br>');
+        echo ('carte de fidélité : oui '.'<br>');
+        echo ('numéro de carte : ' .$client['cardNumber'] .'<hr>');  
+    }elseif ($client['cardTypesId']!=1 && $client ['cardNumber']!=null) {
+        echo ('le Nom  : ' . $client['lastName'] .'<br>'.'le Prenom  : '. $client['firstName'] .'<br>');
+        echo ('date de naissance  : ' .$client['birthDate'].'<br>');
+        echo ('carte de fidélité : non '.'<br>');
+        echo ('numéro de carte : ' .$client['cardNumber'] .'<hr>');  
+    }elseif ($client ['cardNumber']===null) {
+        echo ('le Nom  : ' . $client['lastName'] .'<br>'.'le Prenom  : '. $client['firstName'] .'<br>');
+        echo ('date de naissance  : ' .$client['birthDate'].'<br>');
+        echo ('carte de fidélité : non '.'<br>');
+        echo ('numéro de carte : ' .$client['cardNumber'] .'<hr>');  
+    }
+
 }
+
 
 
 
